@@ -53,6 +53,9 @@ inputs:
   ksu-other:
     required: false
     default: false
+  ksu-patch:
+    required: false
+    default: false
   ksu-url:
     description: 'Using third party KernelSU instead of official KernelSU'
     required: false
@@ -343,7 +346,7 @@ runs:
                     #echo "CONFIG_KSU=m" | tee -a arch/${{ inputs.arch }}/configs/${{ inputs.config }}
                     sed -i '/config KSU/,/help/{s/default y/default m/}' drivers/kernelsu/Kconfig
                 fi
-            elif [ -f nongki.txt ]; then
+            elif [ ${{ inputs.ksu-patch }} = true ]; then
                 if grep -q "CONFIG_KPROBES=y" "arch/${{ inputs.arch }}/configs/${{ inputs.config }}" ; then
                     echo "CONFIG_KPROBES is enabled, skip patch."
                 else
